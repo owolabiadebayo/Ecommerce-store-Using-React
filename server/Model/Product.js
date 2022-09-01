@@ -15,9 +15,8 @@ const product = new mongoose.Schema({
     required: "Price is required",
   },
   image: {
-    type: Buffer,
+    data: Buffer,
     contentType: String,
-    required: "Image is required",
   },
 });
 

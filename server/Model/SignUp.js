@@ -23,6 +23,11 @@ const signUp = new mongoose.Schema({
     trim: true,
     required: "Last name is required",
   },
+  confirm: {
+    type: String,
+    trim: true,
+    required: "Password required"
+  }
 });
 
 export default mongoose.model("Register", signUp);

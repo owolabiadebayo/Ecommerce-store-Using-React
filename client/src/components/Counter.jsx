@@ -1,20 +1,24 @@
 import React from "react";
+import { incrementQuantity, decrementQuantity} from '../redux/cartSlice'
+import { useDispatch } from 'react-redux'
 
-function Counter() {
+function Counter({quantity,id}) {
+  console.log(id);
+  const dispatch = useDispatch();
   return (
     <div>
       <div className="counter flex items-center text-2xl justify-start">
         Quantity
         <div className="ml-5 shadow-md flex">
-        <div className="bg-[#8a4af3] text-white w-8 flex items-center justify-center rounded-l-lg cursor-pointer">
+        <button className="bg-[#8a4af3] text-white w-8 flex items-center justify-center rounded-l-lg cursor-pointer" onClick={() => dispatch(decrementQuantity(id))}>
           -
-        </div>
+        </button>
         <div className="w-8 flex items-center justify-center border-[1px] border-[#8a4af3]">
-          1
+          {quantity}
         </div>
-        <div className="bg-[#8a4af3] text-white w-8 flex items-center justify-center rounded-r-lg cursor-pointer">
+        <button className="bg-[#8a4af3] text-white w-8 flex items-center justify-center rounded-r-lg cursor-pointer" onClick={() => dispatch(incrementQuantity(id))}>
           +
-        </div>
+        </button>
         </div>
       </div>
     </div>

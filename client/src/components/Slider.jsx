@@ -2,6 +2,7 @@ import { ArrowLeftOutlined, ArrowRightOutlined } from "@material-ui/icons";
 import React, { useEffect, useState } from "react";
 import "./Slider.css";
 import {ApiSlides} from '../componentApi/SliderApi';
+import { Link } from "react-router-dom";
 const Slider = () => {
   // Styles
   const slideStyle = "slide flex items-center justify-center h-[100%]";
@@ -50,9 +51,9 @@ const Slider = () => {
                 <div className="discription flex flex-col flex-1 place-items-start justify-center ml-11">
                   <h2 className="text-[55px]">{slide.content.h2}</h2>
                   <p className=" text-[30px]">{slide.content.p}</p>
-                  <button className="btn">
+                  <Link to='/Product' className="btn">
                     Shop Now
-                  </button>
+                  </Link>
                 </div>
               </div>
             </div>

@@ -1,116 +1,144 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
+import axios from 'axios'
+import { useEffect } from "react";
 
-export default class Register extends Component {
+function Register () {
   //style
-  inputStyle =
+  const inputStyle =
     "border-[2px] border-silver rounded-lg outline-[#8a4af3] p-2 focus:border-[#8a4af3] ease-linear duration-200 min-w-0";
 
-  buttonStyle = "mt-5 flex justify-center bg-[#8a4af3] text-white font-medium rounded-md p-2 ease-linear duration-200"
-  activeButtonStyle = ' hover:bg-white hover:text-[#8a4af3] hover:scale-[1.0.5] hover:border-[2px] hover:shadow-md hover:border-[#8a4af3] cursor-pointer'
-  disableButtonStyle = ' opacity-50'
+  const buttonStyle = "mt-5 flex justify-center bg-[#8a4af3] text-white font-medium rounded-md p-2 ease-linear duration-200"
+  const activeButtonStyle = ' hover:bg-white hover:text-[#8a4af3] hover:scale-[1.0.5] hover:border-[2px] hover:shadow-md hover:border-[#8a4af3] cursor-pointer'
+  const disableButtonStyle = ' opacity-50'
   //states
-  state = {
-    first: "",
-    last: "",
+  const initialState = Object.freeze({
+    firstName: "",
+    lastName: "",
     email: "",
-    pass: "",
+    password: "",
     confirm: "",
+   
+  });
+  const confirmpassword = Object.freeze({
     errors: {
       confirm: false,
     },
-  };
+  })
 
-  checkPass = () => {
-     if(this.state.pass === this.state.confirm)
-     {
-         this.setState({...this.state, errors : {confirm : false}})
-     }
-     else
-     {
-       this.setState({...this.state, errors : {confirm : 'Not Same'}})
-       ;
-     }
- }
-  handleChange = (evt) => {
-    const fields = Object.assign({}, this.state);
-    fields[evt.target.name] = evt.target.value;
-    this.setState({ ...fields }, this.checkPass);
-  };
+  const [formData, setFormData] = useState(initialState)
+  console.log(formData);
+  const [formData2, setFormData2] = useState(confirmpassword)
+  console.log(formData);
+  useEffect(()=>{
+    checkPass()
+  },[formData.confirm])
+  const checkPass = () => {
+    if(formData.password === formData.confirm)
+    {
+        setFormData2({...confirmpassword, errors : {confirm : false}})
+    }
+    else
+    {
+      setFormData2({...confirmpassword, errors : {confirm : true}})
+      ;
+    }
+}
 
-  render() {
+  const HandleChange= (e) => {
+    setFormData({...formData,[e.target.name]:e.target.value})
+   
+  }
+  const HandleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+     axios.post(
+        "http://127.0.0.1:8000/api/signup/",
+        formData
+      ).then(res => {
+        console.log(res.data);
+      }
+      )
+      window.location.href = "/"
+    }
+    catch (err) {
+      console.log(err);
+    };
+  }
+
+ 
     return (
       <div className="flex justify-center w-[100%] h-[100vh] bg-[#b892f7]">
         <div className="flex flex-col absolute top-[20%] shadow-lg border-silver border-[2px] bg-white rounded-lg p-5 mobile:w-[90%]">
           <text className="text-2xl ">REGISTER</text>
-
+          <form onSubmit={HandleSubmit}>
           {/* First Name Last Name */}
           <div className="flex mt-7 w-auto">
             <input
-              className={this.inputStyle + ` mr-3`}
-              name="first"
+              className={inputStyle + ` mr-3`}
+              name="firstName"
               type="text"
               placeholder="First Name"
-              onChange={this.handleChange}
-              value={this.state.first}
+              onChange={HandleChange}
+              value={formData.firstName}
               required
             />
             <input
-              className={this.inputStyle}
-              name="last"
+              className={inputStyle}
+              name="lastName"
               type="text"
               placeholder="Last Name"
-              onChange={this.handleChange}
-              value={this.state.last}
+              onChange={HandleChange}
+              value={formData.lastName}
             />
           </div>
 
           {/* Email */}
           <input
-            className={this.inputStyle + ` mt-7 mobile:w-[100%]`}
+            className={inputStyle + ` mt-7 mobile:w-[100%]`}
             name="email"
             type="email"
             placeholder="Email"
-            onChange={this.handleChange}
-            value={this.state.email}
+            onChange={HandleChange}
+            value={formData.email}
             required
           />
-
           {/* Password */}
           <div className="flex mt-7">
             <input
-              className={this.inputStyle + ` mr-3`}
-              name="pass"
+              className={inputStyle + ` mr-3`}
+              name="password"
               type="password"
               placeholder="Password"
-              onChange={this.handleChange}
-              value={this.state.pass}
+              onChange={HandleChange}
+              value={formData.password}
               required
             />
             <input
-              className={this.inputStyle}
+              className={inputStyle}
               name="confirm"
               type="password"
               placeholder="Confirm Password"
-              onChange={this.handleChange}
-              value={this.state.confirm}
+              onChange={HandleChange}
+              value={formData.confirm}
               required
             />
-          </div>
+          </div>   
           <div className="flex justify-center">
             <span className="flex-1 mr-3"></span>
             <span className="flex-1 text-red-500">
-              {this.state.errors.confirm}
+              {formData2.errors.confirm}
             </span>
           </div>
-
           {/* Submit button */}
           <input
-            type="button"
-            className={(this.state.errors.confirm)? this.buttonStyle+this.disableButtonStyle: this.buttonStyle+this.activeButtonStyle}
+            type="Submit"
+            className={(formData2.errors.confirm)? buttonStyle+disableButtonStyle: buttonStyle+activeButtonStyle}
             value="Sign up"
           />
+           </form>
         </div>
       </div>
     );
   }
-}
+
+export default Register;
