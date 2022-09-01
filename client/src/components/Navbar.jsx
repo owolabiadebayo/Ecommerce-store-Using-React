@@ -1,9 +1,21 @@
 import { Badge } from "@material-ui/core";
 import { Search, ShoppingCartOutlined } from "@material-ui/icons";
 import React from "react";
+import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const Navbar = () => {
   const style = "text-[14px], cursor-pointer, ml-[25px] mobile:ml-[5px]";
+  const cart = useSelector((state) => state.cart)
+  console.log(cart);
+  const getTotalQuantity = () => {
+    let total = 0
+    cart.forEach(item => {
+      total += item.quantity
+    })
+    return total
+  }
+  
   return (
     <div className="navbar h-[60px] shadow-md relative z-10 ">
       <div className="wrapper pl-[20px] pr-[20px] pt-[10px] pb-[10px] flex justify-between items-center mobile:pl-0 mobile:pr-0">
@@ -28,13 +40,13 @@ const Navbar = () => {
 
         {/* Right Side */}
         <div className="right flex flex-1 items-center justify-end mobile:justify-center mobile:flex-[2]">
-          <div className={style}>Register</div>
-          <div className={style}>Sign In</div>
-          <div className={style}>
-            <Badge badgeContent={4} color="primary">
+          <Link to='/signup' className={style}>Register</Link>
+          <Link to="/signin" className={style}>Sign In</Link>
+          <Link  to="/cart" className={style}>
+            <Badge badgeContent= {getTotalQuantity() || 0} color="primary">
               <ShoppingCartOutlined />
             </Badge>
-          </div>
+          </Link>
         </div>
       </div>
     </div>
